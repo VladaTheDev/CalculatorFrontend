@@ -5,6 +5,7 @@ import FormulaScreen from '~/components/FormulaScreen';
 import {
   checkZeroDigit, checkLastAction, isDot, isNumber, deleteElement, changeLastElement
 } from '~/utils/';
+import download from 'downloadjs';
 
 import {
   Wrapper, Parent, Layer,
@@ -33,6 +34,20 @@ export default function Calculator() {
       }
     }
   }
+
+    function downloadAction() {
+      const data = new FormData();
+      data.append('expression', result);
+      const requestOptions = {
+        method: 'POST',
+        body: data
+      };
+      promise: fetch('http://localhost:8080/api/calculate/report', requestOptions).then(function(resp) {
+                                                                                              return resp.blob();
+                                                                                            }).then(function(blob) {
+                                                                                              return download(blob, "result.txt");
+                                                                                            });
+    }
 
   function resetAction() {
     setResult('0');
@@ -69,6 +84,9 @@ export default function Calculator() {
       case '=':
         equalAction(value);
         break;
+      case 'load':
+        downloadAction(value);
+        break;
       default:
         othersActions(value);
         break;
@@ -103,6 +121,7 @@ export default function Calculator() {
         <Button value="." id="decimal" onClick={calculate} />
         <Button value="0" id="zero" onClick={calculate} />
         <Button value="=" id="equals" onClick={calculate} />
+        <Button value="load" id="load" onClick={calculate} />
       </Wrapper>
     </Parent>
   );
