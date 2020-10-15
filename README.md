@@ -1,7 +1,6 @@
-## :thinking: About
+About
 
 Calculator that allows to do basic maths operations and to save report to txt file
-:one: ➕ :one:
 
 <div align="center">
 
